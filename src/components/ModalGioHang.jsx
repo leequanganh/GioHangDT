@@ -15,11 +15,35 @@ export default class ModalGioHang extends Component {
             <td>
               <img src={item.hinhAnh} style={{ width: "100px" }} />
             </td>
+            <td>
+              <button
+                onClick={() => {
+                  return this.props.handleThayDoiSoLuong(item.maSP, +1);
+                }}
+                className="btn btn-success"
+              >
+                +
+              </button>
+              {item.soLuong}
+              <button
+                onClick={() => {
+                  return this.props.handleThayDoiSoLuong(item.maSP, -1);
+                }}
+                className="btn btn-danger"
+              >
+                -
+              </button>
+            </td>
             {/* <td>{item.maSP}</td> */}
           </tr>
         </tbody>
       );
     });
+  };
+  renderTotalDT = () => {
+    return this.props.dataGioHang.reduce((total, item) => {
+      return total + item.soLuong;
+    }, 0);
   };
 
   setVisible = (param) => {
@@ -35,7 +59,7 @@ export default class ModalGioHang extends Component {
           type="primary"
           onClick={() => this.setVisible(true)}
         >
-          Giỏ Hàng
+          Giỏ Hàng({this.renderTotalDT()})
         </Button>
         <Modal
           title="Modal 1000px width"

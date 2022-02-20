@@ -25,16 +25,45 @@ export default class Index extends Component {
     });
   };
   handleThemDT = (data) => {
+    let indexDT = this.state.dataGioHang.findIndex((item) => {
+      return item.maSP == data.maSP;
+    });
     let dataGioHangClone = [...this.state.dataGioHang];
-    dataGioHangClone.push(data);
+    if (indexDT == -1) {
+      data.soLuong = 1;
+      dataGioHangClone.push(data);
+    } else if (indexDT !== -1) {
+      dataGioHangClone[indexDT].soLuong++;
+    }
     this.setState({
       dataGioHang: dataGioHangClone,
     });
   };
+  handleThayDoiSoLuong = (index, type) => {
+    let cloneDataGioHang = [...this.state.dataGioHang];
+    let indexSp = this.state.dataGioHang.findIndex((sp) => {
+      return sp.maSP === index;
+    });
+    if (indexSp !== -1 && type === 1) {
+      cloneDataGioHang[indexSp].soLuong++;
+      console.log(cloneDataGioHang[indexSp].soLuong);
+    }
+    if (indexSp !== -1 && type === -1) {
+      if (cloneDataGioHang[indexSp].soLuong === 1) {
+        cloneDataGioHang.splice(indexSp, 1);
+      } else {
+        cloneDataGioHang[indexSp].soLuong--;
+      }
+    }
+    this.setState({ dataGioHang: cloneDataGioHang });
+  };
   render() {
     return (
       <div className=" bg-warning d-flex flex-column align-items-center">
-        <ModalGioHang dataGioHang={this.state.dataGioHang} />
+        <ModalGioHang
+          dataGioHang={this.state.dataGioHang}
+          handleThayDoiSoLuong={this.handleThayDoiSoLuong}
+        />
         <PhoneList
           dataDanhSachDienThoai={datDanhSachDienThoai}
           handleRenderChiTietDT={this.handleRenderChiTietDT}
